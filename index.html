@@ -32,7 +32,6 @@
         overflow-x: hidden;
       }
 
-      /* Мягкие световые пятна */
       body::before {
         content: "";
         position: fixed;
@@ -74,7 +73,6 @@
         z-index: 1;
       }
 
-      /* Шапка */
       header {
         display: flex;
         justify-content: space-between;
@@ -94,7 +92,6 @@
         vertical-align: middle;
       }
 
-      /* Главный экран */
       .hero {
         min-height: 72vh;
         display: flex;
@@ -139,7 +136,6 @@
         line-height: 1.8;
       }
 
-      /* Декоративный круг */
       .flower {
         position: absolute;
         right: 10px;
@@ -175,7 +171,6 @@
         }
       }
 
-      /* Информация */
       .information {
         border-top: 1px solid #ded9d3;
         border-bottom: 1px solid #ded9d3;
@@ -201,7 +196,6 @@
         overflow-wrap: anywhere;
       }
 
-      /* Текст приглашения */
       .invitation {
         padding: 65px 0 45px;
         max-width: 560px;
@@ -223,7 +217,6 @@
         max-width: 440px;
       }
 
-      /* Кнопки */
       .button-wrap {
         margin-top: 30px;
         display: flex;
@@ -258,29 +251,30 @@
         opacity: 0.7;
         cursor: wait;
         transform: none;
+        box-shadow: none;
       }
 
-      /* Убегающая кнопка */
       #noButton {
         background: transparent;
         color: #9a918a;
         border: 1px solid #d5cdc6;
         min-width: 160px;
         position: relative;
+        z-index: 5;
         transition:
           left 0.25s ease,
           top 0.25s ease,
-          transform 0.25s ease;
-        z-index: 5;
+          background 0.25s ease,
+          color 0.25s ease;
       }
 
       #noButton:hover {
         background: #f0ebe6;
         color: #6f6761;
         box-shadow: none;
+        transform: none;
       }
 
-      /* Ответ */
       #answer {
         display: none;
         margin-top: 25px;
@@ -324,7 +318,6 @@
         }
       }
 
-      /* Подвал */
       footer {
         margin-top: auto;
         padding-top: 60px;
@@ -470,11 +463,10 @@
 
         .button-wrap {
           margin-top: 28px;
-          display: flex;
           flex-direction: column;
           align-items: stretch;
           gap: 12px;
-          min-height: 135px;
+          min-height: 145px;
         }
 
         button {
@@ -612,20 +604,15 @@
 
         <!-- Кнопки -->
         <div class="button-wrap">
-          <button id="acceptButton" type="button" onclick="accept()">
-            Принять приглашение
-          </button>
+          <button id="acceptButton" type="button">Принять приглашение</button>
 
           <button id="noButton" type="button">Нет, не пойду</button>
         </div>
 
-        <!-- Сообщение об ошибке -->
-        <div id="errorMessage">
-          Не удалось отправить ответ. Проверь интернет-соединение и попробуй ещё
-          раз ❤️
-        </div>
+        <!-- Ошибка Telegram -->
+        <div id="errorMessage"></div>
 
-        <!-- Ответ после принятия -->
+        <!-- Ответ -->
         <div id="answer">
           <h2>Фух, рада, что ты согласилась!</h2>
 
@@ -645,82 +632,156 @@
     </main>
 
     <script>
-      /* ==========================================
-       ПРИНЯТИЕ ПРИГЛАШЕНИЯ
-       ========================================== */
+      /*
+    ========================================================
+    TELEGRAM
+    ========================================================
 
-      async function accept() {
-        const acceptButton = document.getElementById("acceptButton");
+    ВСТАВЬ НОВЫЙ ТОКЕН ОТ @BotFather.
 
-        const noButton = document.getElementById("noButton");
+    Твой chat_id:
+    919523071
+    */
 
-        const answer = document.getElementById("answer");
+      const BOT_TOKEN = "8983993848:AAEfFggQV6tfGt8dp-3WdNbyGKDewYzvKnk";
 
-        const errorMessage = document.getElementById("errorMessage");
+      const CHAT_ID = "919523071";
 
-        /* Скрываем предыдущую ошибку */
-        errorMessage.style.display = "none";
+      /*
+    ========================================================
+    ЭЛЕМЕНТЫ
+    ========================================================
+    */
 
-        /* Блокируем кнопку */
+      const acceptButton = document.getElementById("acceptButton");
+
+      const noButton = document.getElementById("noButton");
+
+      const answer = document.getElementById("answer");
+
+      const errorMessage = document.getElementById("errorMessage");
+
+      const buttonWrap = document.querySelector(".button-wrap");
+
+      /*
+    ========================================================
+    ОТПРАВКА В TELEGRAM
+    ========================================================
+    */
+
+      async function sendTelegramMessage() {
+        const message =
+          "💌 <b>Ответ на приглашение</b>\n\n" +
+          "❤️ Сестра согласилась на приглашение!\n\n" +
+          "📅 <b>Дата:</b> 29 августа\n" +
+          "🕓 <b>Время:</b> 16:00\n" +
+          "📸 <b>Место:</b> фото-студия без фотографа\n" +
+          "🤍 <b>Дресс-код:</b> красивый белый образ\n\n" +
+          "🕐 <b>Ответ получен:</b> " +
+          new Date().toLocaleString("ru-RU");
+
+        const telegramUrl =
+          "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage";
+
+        const response = await fetch(telegramUrl, {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+
+            text: message,
+
+            parse_mode: "HTML",
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!result.ok) {
+          throw new Error(result.description || "Telegram API error");
+        }
+
+        return result;
+      }
+
+      /*
+    ========================================================
+    НАЖАТИЕ "ПРИНЯТЬ ПРИГЛАШЕНИЕ"
+    ========================================================
+    */
+
+      acceptButton.addEventListener("click", async function () {
+        /*
+        Сохраняем исходный текст
+        */
+
+        const originalText = acceptButton.textContent;
+
+        /*
+        Блокируем кнопку
+        */
+
         acceptButton.disabled = true;
+
         acceptButton.textContent = "Отправляем...";
 
+        errorMessage.style.display = "none";
+
         try {
-          const response = await fetch("send.php", {
-            method: "POST",
+          /*
+          Отправляем уведомление
+          */
 
-            headers: {
-              "Content-Type": "application/json",
-            },
+          await sendTelegramMessage();
 
-            body: JSON.stringify({
-              answer: "Сестра согласилась на приглашение ❤️",
-
-              date: new Date().toLocaleString("ru-RU"),
-            }),
-          });
-
-          const result = await response.json();
-
-          if (!response.ok || !result.success) {
-            throw new Error(result.error || "Ошибка отправки");
-          }
-
-          /* Всё успешно */
+          /*
+          Успешно
+          */
 
           acceptButton.style.display = "none";
 
           noButton.style.display = "none";
 
+          errorMessage.style.display = "none";
+
           answer.style.display = "block";
+
+          /*
+          Прокручиваем к ответу
+          */
 
           answer.scrollIntoView({
             behavior: "smooth",
             block: "center",
           });
         } catch (error) {
-          console.error(error);
+          console.error("Telegram error:", error);
+
+          /*
+          Показываем ошибку
+          */
 
           acceptButton.disabled = false;
 
-          acceptButton.textContent = "Принять приглашение";
+          acceptButton.textContent = originalText;
 
           errorMessage.textContent =
-            "Не удалось отправить ответ. " +
-            "Проверь, что сайт размещён на сервере " +
-            "с поддержкой PHP, и попробуй ещё раз ❤️";
+            "Не удалось отправить уведомление в Telegram. " +
+            "Проверь токен бота и chat_id.";
 
           errorMessage.style.display = "block";
         }
-      }
+      });
 
-      /* ==========================================
-       УБЕГАЮЩАЯ КНОПКА
-       ========================================== */
-
-      const noButton = document.getElementById("noButton");
-
-      const buttonWrap = document.querySelector(".button-wrap");
+      /*
+    ========================================================
+    УБЕГАЮЩАЯ КНОПКА
+    ========================================================
+    */
 
       function moveButton() {
         const buttonWidth = noButton.offsetWidth;
@@ -742,17 +803,28 @@
         noButton.style.top = randomY + "px";
       }
 
-      /* Компьютер */
+      /*
+    Компьютер:
+    убегает при наведении
+    */
+
       noButton.addEventListener("mouseenter", moveButton);
 
-      /* Телефон */
+      /*
+    Телефон:
+    убегает при касании
+    */
+
       noButton.addEventListener("touchstart", function (event) {
         event.preventDefault();
 
         moveButton();
       });
 
-      /* Если всё-таки нажали */
+      /*
+    Если всё-таки получилось нажать
+    */
+
       noButton.addEventListener("click", function (event) {
         event.preventDefault();
 
