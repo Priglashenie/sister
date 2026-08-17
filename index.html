@@ -29,6 +29,7 @@
       overflow-x: hidden;
     }
 
+    /* Мягкие световые пятна */
     body::before {
       content: "";
       position: fixed;
@@ -41,6 +42,7 @@
       filter: blur(100px);
       border-radius: 50%;
       pointer-events: none;
+      z-index: 0;
     }
 
     body::after {
@@ -55,6 +57,7 @@
       filter: blur(100px);
       border-radius: 50%;
       pointer-events: none;
+      z-index: 0;
     }
 
     .page {
@@ -68,6 +71,7 @@
       z-index: 1;
     }
 
+    /* Шапка */
     header {
       display: flex;
       justify-content: space-between;
@@ -87,6 +91,7 @@
       vertical-align: middle;
     }
 
+    /* Главный экран */
     .hero {
       min-height: 72vh;
       display: flex;
@@ -108,16 +113,19 @@
       margin: 0;
       font-family: "Bodoni Moda", serif;
       font-weight: 400;
-      font-size: clamp(72px, 15vw, 135px);
-      line-height: 0.82;
-      letter-spacing: -6px;
+      font-size: clamp(58px, 13vw, 115px);
+      line-height: 0.9;
+      letter-spacing: -4px;
       color: #302b28;
+      overflow-wrap: break-word;
+      word-break: normal;
     }
 
     h1 em {
       font-weight: 400;
       color: #a87e6b;
-      margin-left: 55px;
+      margin-left: 45px;
+      font-style: normal;
     }
 
     .hero-description {
@@ -128,6 +136,7 @@
       line-height: 1.8;
     }
 
+    /* Декоративный круг */
     .flower {
       position: absolute;
       right: 10px;
@@ -163,6 +172,7 @@
       }
     }
 
+    /* Информация */
     .information {
       border-top: 1px solid #ded9d3;
       border-bottom: 1px solid #ded9d3;
@@ -187,6 +197,7 @@
       line-height: 1.3;
     }
 
+    /* Текст приглашения */
     .invitation {
       padding: 65px 0 45px;
       max-width: 560px;
@@ -208,6 +219,7 @@
       max-width: 440px;
     }
 
+    /* Кнопки */
     .button-wrap {
       margin-top: 30px;
       display: flex;
@@ -238,7 +250,7 @@
       box-shadow: 0 12px 30px rgba(100, 70, 55, 0.15);
     }
 
-    /* Убегающая кнопка */
+    /* Кнопка "нет" */
     #noButton {
       background: transparent;
       color: #9a918a;
@@ -249,6 +261,7 @@
         left 0.25s ease,
         top 0.25s ease,
         transform 0.25s ease;
+      z-index: 5;
     }
 
     #noButton:hover {
@@ -257,6 +270,7 @@
       box-shadow: none;
     }
 
+    /* Ответ */
     #answer {
       display: none;
       margin-top: 25px;
@@ -270,6 +284,7 @@
       font-family: "Bodoni Moda", serif;
       font-size: 32px;
       font-weight: 400;
+      color: #38312d;
     }
 
     #answer p {
@@ -291,6 +306,7 @@
       }
     }
 
+    /* Подвал */
     footer {
       margin-top: auto;
       padding-top: 60px;
@@ -304,6 +320,7 @@
 
     /* Планшет */
     @media (max-width: 700px) {
+
       .page {
         padding: 30px 26px 38px;
       }
@@ -314,12 +331,13 @@
       }
 
       h1 {
-        font-size: clamp(68px, 17vw, 105px);
-        letter-spacing: -5px;
+        font-size: clamp(56px, 13.5vw, 92px);
+        letter-spacing: -4px;
+        line-height: 0.9;
       }
 
       h1 em {
-        margin-left: 35px;
+        margin-left: 30px;
       }
 
       .hero-description {
@@ -342,6 +360,7 @@
 
     /* Телефон */
     @media (max-width: 520px) {
+
       body {
         overflow-x: hidden;
       }
@@ -374,13 +393,14 @@
       }
 
       h1 {
-        font-size: clamp(64px, 19vw, 88px);
-        line-height: 0.88;
-        letter-spacing: -4px;
+        font-size: clamp(48px, 14vw, 70px);
+        line-height: 0.95;
+        letter-spacing: -3px;
+        max-width: 100%;
       }
 
       h1 em {
-        margin-left: 22px;
+        margin-left: 18px;
       }
 
       .hero-description {
@@ -438,7 +458,7 @@
         flex-direction: column;
         align-items: stretch;
         gap: 12px;
-        min-height: 125px;
+        min-height: 135px;
       }
 
       button {
@@ -449,6 +469,7 @@
 
       #noButton {
         width: 150px;
+        min-width: 150px;
         align-self: flex-start;
       }
 
@@ -461,13 +482,19 @@
 
     /* Очень маленькие телефоны */
     @media (max-width: 360px) {
+
       .page {
         padding-left: 16px;
         padding-right: 16px;
       }
 
       h1 {
-        font-size: 62px;
+        font-size: 45px;
+        letter-spacing: -2.5px;
+      }
+
+      h1 em {
+        margin-left: 12px;
       }
 
       .invitation-title {
@@ -481,6 +508,10 @@
       .info-value {
         font-size: 15px;
       }
+
+      .hero-description {
+        max-width: 270px;
+      }
     }
   </style>
 </head>
@@ -489,6 +520,7 @@
 
   <main class="page">
 
+    <!-- Шапка -->
     <header>
       <span>
         <span class="header-line"></span>
@@ -501,6 +533,7 @@
     </header>
 
 
+    <!-- Главный экран -->
     <section class="hero">
 
       <div class="small-title">
@@ -508,15 +541,15 @@
       </div>
 
       <h1>
-        Приглашение-<br>
+        Приглашение<br>
         <em>сюрприз!</em>
       </h1>
 
       <p class="hero-description">
         Дорогая сестра, в связи с отсутствием
-	девичника, спешу тебя пригласить на
-	маленький праздник в честь свадьбы, где
-	мы сможешь провести время вдвоём ♡.
+        девичника, спешу тебя пригласить на
+        маленький праздник в честь свадьбы,
+        где мы сможем провести время вдвоём ♡
       </p>
 
       <div class="flower">
@@ -526,6 +559,7 @@
     </section>
 
 
+    <!-- Информация -->
     <section class="information">
 
       <div>
@@ -574,30 +608,38 @@
     </section>
 
 
+    <!-- Приглашение -->
     <section class="invitation">
 
       <div class="invitation-title">
-        Один вечер.
+        Один вечер.<br>
         Только мы.
       </div>
 
 
       <div class="invitation-text">
         Предлагаю красиво одеться, встретиться
-	и просто провести время вместе, запечатлив этот момент.
+        и просто провести время вместе,
+        запечатлив этот момент.
 
         <br><br>
 
         Дресс-код — нарядно и так,
         чтобы самой себе понравиться.
         Платье, костюм или любимый красивый образ,
-	желательно белый!! (как никак мини-девичник ☺)
+        желательно белый!! (как никак мини-девичник ☺)
+
+        <br><br>
+
+        А куда именно мы отправимся —
+        узнаешь уже совсем скоро.
       </div>
 
 
+      <!-- Кнопки -->
       <div class="button-wrap">
 
-        <button onclick="accept()">
+        <button id="acceptButton" onclick="accept()">
           Принять приглашение
         </button>
 
@@ -608,6 +650,7 @@
       </div>
 
 
+      <!-- Ответ после принятия -->
       <div id="answer">
 
         <h2>
@@ -616,7 +659,7 @@
 
         <p>
           Тогда вечер официально забронирован.
-          Осталось только дождаться встречи.
+          Осталось только дождаться встречи ♡
         </p>
 
       </div>
@@ -624,6 +667,7 @@
     </section>
 
 
+    <!-- Подвал -->
     <footer>
 
       <span>
@@ -641,16 +685,15 @@
 
   <script>
 
+    /* Кнопка "Принять приглашение" */
     function accept() {
 
-      const button = document.querySelector("#acceptButton");
+      const acceptButton = document.getElementById("acceptButton");
+      const noButton = document.getElementById("noButton");
       const answer = document.getElementById("answer");
 
-      if (button) {
-        button.style.display = "none";
-      }
-
-      document.getElementById("noButton").style.display = "none";
+      acceptButton.style.display = "none";
+      noButton.style.display = "none";
 
       answer.style.display = "block";
 
@@ -658,20 +701,25 @@
         behavior: "smooth",
         block: "center"
       });
-
     }
 
 
+    /* Убегающая кнопка */
     const noButton = document.getElementById("noButton");
     const buttonWrap = document.querySelector(".button-wrap");
 
     function moveButton() {
 
-      const maxX = Math.max(0, buttonWrap.clientWidth - noButton.offsetWidth);
-      const maxY = Math.max(0, buttonWrap.clientHeight - noButton.offsetHeight);
+      const wrapRect = buttonWrap.getBoundingClientRect();
 
-      const randomX = Math.floor(Math.random() * maxX);
-      const randomY = Math.floor(Math.random() * maxY);
+      const buttonWidth = noButton.offsetWidth;
+      const buttonHeight = noButton.offsetHeight;
+
+      const maxX = Math.max(0, buttonWrap.clientWidth - buttonWidth);
+      const maxY = Math.max(0, buttonWrap.clientHeight - buttonHeight);
+
+      const randomX = Math.floor(Math.random() * (maxX + 1));
+      const randomY = Math.floor(Math.random() * (maxY + 1));
 
       noButton.style.position = "absolute";
       noButton.style.left = randomX + "px";
@@ -679,12 +727,18 @@
     }
 
 
+    /* Компьютер */
     noButton.addEventListener("mouseenter", moveButton);
+
+
+    /* Телефон */
     noButton.addEventListener("touchstart", function(event) {
       event.preventDefault();
       moveButton();
     });
 
+
+    /* Если каким-то образом всё-таки нажали */
     noButton.addEventListener("click", function(event) {
       event.preventDefault();
       moveButton();
