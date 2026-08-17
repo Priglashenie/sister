@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Для тебя</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f8f6f2;
+      color: #282522;
+      font-family: "Manrope", sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      top: -250px;
+      right: -180px;
+      background: #ead8cf;
+      opacity: 0.35;
+      filter: blur(100px);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      bottom: -200px;
+      left: -150px;
+      background: #e5ded0;
+      opacity: 0.35;
+      filter: blur(100px);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .page {
+      width: min(100%, 720px);
+      min-height: 100vh;
+      margin: auto;
+      padding: 38px 34px 45px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #8d857d;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .header-line {
+      width: 45px;
+      height: 1px;
+      background: #b9a89c;
+      margin-right: 12px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .hero {
+      min-height: 72vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 70px 0 50px;
+      position: relative;
+    }
+
+    .small-title {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #9c8173;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Bodoni Moda", serif;
+      font-weight: 400;
+      font-size: clamp(72px, 15vw, 135px);
+      line-height: 0.82;
+      letter-spacing: -6px;
+      color: #302b28;
+    }
+
+    h1 em {
+      font-weight: 400;
+      color: #a87e6b;
+      margin-left: 55px;
+    }
+
+    .hero-description {
+      max-width: 390px;
+      margin: 45px 0 0 8px;
+      color: #77706a;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .flower {
+      position: absolute;
+      right: 10px;
+      bottom: 80px;
+      width: 100px;
+      height: 100px;
+      border: 1px solid rgba(168, 126, 107, 0.35);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a87e6b;
+      font-family: "Bodoni Moda", serif;
+      font-size: 25px;
+      animation: rotate 20s linear infinite;
+    }
+
+    .flower::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(168, 126, 107, 0.2);
+      border-radius: 50%;
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .information {
+      border-top: 1px solid #ded9d3;
+      border-bottom: 1px solid #ded9d3;
+      padding: 25px 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .info-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #a19a94;
+      margin-bottom: 9px;
+    }
+
+    .info-value {
+      font-family: "Bodoni Moda", serif;
+      font-size: 20px;
+      color: #39332f;
+      line-height: 1.3;
+    }
+
+    .invitation {
+      padding: 65px 0 45px;
+      max-width: 560px;
+    }
+
+    .invitation-title {
+      font-family: "Bodoni Moda", serif;
+      font-size: 42px;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 25px;
+      color: #38312d;
+    }
+
+    .invitation-text {
+      font-size: 15px;
+      line-height: 1.9;
+      color: #756e68;
+      max-width: 440px;
+    }
+
+    .button-wrap {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      position: relative;
+      min-height: 58px;
+    }
+
+    button {
+      border: none;
+      background: #3b3531;
+      color: #fff;
+      padding: 17px 32px;
+      min-width: 210px;
+      font-family: "Manrope", sans-serif;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.35s ease;
+    }
+
+    button:hover {
+      background: #a87e6b;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(100, 70, 55, 0.15);
+    }
+
+    /* Убегающая кнопка */
+    #noButton {
+      background: transparent;
+      color: #9a918a;
+      border: 1px solid #d5cdc6;
+      min-width: 160px;
+      position: relative;
+      transition:
+        left 0.25s ease,
+        top 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    #noButton:hover {
+      background: #f0ebe6;
+      color: #6f6761;
+      box-shadow: none;
+    }
+
+    #answer {
+      display: none;
+      margin-top: 25px;
+      padding: 25px 0;
+      border-top: 1px solid #ded9d3;
+      animation: fadeUp 0.7s ease;
+    }
+
+    #answer h2 {
+      margin: 0 0 8px;
+      font-family: "Bodoni Moda", serif;
+      font-size: 32px;
+      font-weight: 400;
+    }
+
+    #answer p {
+      margin: 0;
+      color: #817a74;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      margin-top: auto;
+      padding-top: 60px;
+      display: flex;
+      justify-content: space-between;
+      color: #aaa39c;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Планшет */
+    @media (max-width: 700px) {
+      .page {
+        padding: 30px 26px 38px;
+      }
+
+      .hero {
+        min-height: 68vh;
+        padding: 60px 0 40px;
+      }
+
+      h1 {
+        font-size: clamp(68px, 17vw, 105px);
+        letter-spacing: -5px;
+      }
+
+      h1 em {
+        margin-left: 35px;
+      }
+
+      .hero-description {
+        margin-top: 36px;
+        max-width: 350px;
+      }
+
+      .flower {
+        width: 80px;
+        height: 80px;
+        right: 0;
+        bottom: 55px;
+      }
+
+      .information {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px 18px;
+      }
+    }
+
+    /* Телефон */
+    @media (max-width: 520px) {
+      body {
+        overflow-x: hidden;
+      }
+
+      .page {
+        width: 100%;
+        min-height: 100dvh;
+        padding: 22px 20px 30px;
+      }
+
+      header {
+        font-size: 8px;
+        letter-spacing: 1.8px;
+      }
+
+      .header-line {
+        width: 28px;
+        margin-right: 7px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 70px 0 80px;
+      }
+
+      .small-title {
+        font-size: 9px;
+        letter-spacing: 2px;
+        margin-bottom: 24px;
+      }
+
+      h1 {
+        font-size: clamp(64px, 19vw, 88px);
+        line-height: 0.88;
+        letter-spacing: -4px;
+      }
+
+      h1 em {
+        margin-left: 22px;
+      }
+
+      .hero-description {
+        margin: 32px 0 0 2px;
+        font-size: 13px;
+        line-height: 1.75;
+        max-width: 290px;
+      }
+
+      .flower {
+        width: 68px;
+        height: 68px;
+        right: 2px;
+        bottom: 25px;
+        font-size: 18px;
+      }
+
+      .flower::before {
+        inset: 8px;
+      }
+
+      .information {
+        grid-template-columns: 1fr 1fr;
+        gap: 22px 15px;
+        padding: 22px 0;
+      }
+
+      .info-label {
+        font-size: 8px;
+        letter-spacing: 1.5px;
+      }
+
+      .info-value {
+        font-size: 17px;
+      }
+
+      .invitation {
+        padding: 48px 0 30px;
+      }
+
+      .invitation-title {
+        font-size: 33px;
+        line-height: 1.08;
+        margin-bottom: 20px;
+      }
+
+      .invitation-text {
+        font-size: 13px;
+        line-height: 1.8;
+      }
+
+      .button-wrap {
+        margin-top: 28px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        min-height: 125px;
+      }
+
+      button {
+        width: 100%;
+        min-width: 0;
+        padding: 16px 20px;
+      }
+
+      #noButton {
+        width: 150px;
+        align-self: flex-start;
+      }
+
+      footer {
+        padding-top: 45px;
+        font-size: 8px;
+        letter-spacing: 1.5px;
+      }
+    }
+
+    /* Очень маленькие телефоны */
+    @media (max-width: 360px) {
+      .page {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      h1 {
+        font-size: 62px;
+      }
+
+      .invitation-title {
+        font-size: 30px;
+      }
+
+      .information {
+        gap: 18px 10px;
+      }
+
+      .info-value {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="page">
+
+    <header>
+      <span>
+        <span class="header-line"></span>
+        PRIVATE INVITATION
+      </span>
+
+      <span>
+        2026
+      </span>
+    </header>
+
+
+    <section class="hero">
+
+      <div class="small-title">
+        специально для моей сестры
+      </div>
+
+      <h1>
+        Приглашение-<br>
+        <em>сюрприз!</em>
+      </h1>
+
+      <p class="hero-description">
+        Дорогая сестра, в связи с отсутствием
+	девичника, спешу тебя пригласить на
+	маленький праздник в честь свадьбы, где
+	мы сможешь провести время вдвоём ♡.
+      </p>
+
+      <div class="flower">
+        ✦
+      </div>
+
+    </section>
+
+
+    <section class="information">
+
+      <div>
+        <div class="info-label">
+          дата
+        </div>
+
+        <div class="info-value">
+          29 августа
+        </div>
+      </div>
+
+
+      <div>
+        <div class="info-label">
+          время
+        </div>
+
+        <div class="info-value">
+          16:00
+        </div>
+      </div>
+
+
+      <div>
+        <div class="info-label">
+          место
+        </div>
+
+        <div class="info-value">
+          фото-студия без фотографа 📸
+        </div>
+      </div>
+
+
+      <div>
+        <div class="info-label">
+          дресс-код
+        </div>
+
+        <div class="info-value">
+          красивый белый образ ✦
+        </div>
+      </div>
+
+    </section>
+
+
+    <section class="invitation">
+
+      <div class="invitation-title">
+        Один вечер.
+        Только мы.
+      </div>
+
+
+      <div class="invitation-text">
+        Предлагаю красиво одеться, встретиться
+	и просто провести время вместе, запечатлив этот момент.
+
+        <br><br>
+
+        Дресс-код — нарядно и так,
+        чтобы самой себе понравиться.
+        Платье, костюм или любимый красивый образ,
+	желательно белый!! (как никак мини-девичник ☺)
+      </div>
+
+
+      <div class="button-wrap">
+
+        <button onclick="accept()">
+          Принять приглашение
+        </button>
+
+        <button id="noButton" type="button">
+          Нет, не пойду
+        </button>
+
+      </div>
+
+
+      <div id="answer">
+
+        <h2>
+          Фух, рада, что ты согласилась!
+        </h2>
+
+        <p>
+          Тогда вечер официально забронирован.
+          Осталось только дождаться встречи.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <footer>
+
+      <span>
+        with love
+      </span>
+
+      <span>
+        sister's date
+      </span>
+
+    </footer>
+
+  </main>
+
+
+  <script>
+
+    function accept() {
+
+      const button = document.querySelector("#acceptButton");
+      const answer = document.getElementById("answer");
+
+      if (button) {
+        button.style.display = "none";
+      }
+
+      document.getElementById("noButton").style.display = "none";
+
+      answer.style.display = "block";
+
+      answer.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }
+
+
+    const noButton = document.getElementById("noButton");
+    const buttonWrap = document.querySelector(".button-wrap");
+
+    function moveButton() {
+
+      const maxX = Math.max(0, buttonWrap.clientWidth - noButton.offsetWidth);
+      const maxY = Math.max(0, buttonWrap.clientHeight - noButton.offsetHeight);
+
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      noButton.style.position = "absolute";
+      noButton.style.left = randomX + "px";
+      noButton.style.top = randomY + "px";
+    }
+
+
+    noButton.addEventListener("mouseenter", moveButton);
+    noButton.addEventListener("touchstart", function(event) {
+      event.preventDefault();
+      moveButton();
+    });
+
+    noButton.addEventListener("click", function(event) {
+      event.preventDefault();
+      moveButton();
+    });
+
+  </script>
+
+</body>
+</html>
