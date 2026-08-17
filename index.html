@@ -250,7 +250,13 @@
       box-shadow: 0 12px 30px rgba(100, 70, 55, 0.15);
     }
 
-    /* Кнопка "нет" */
+    button:disabled {
+      cursor: wait;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    /* Кнопка "Нет" */
     #noButton {
       background: transparent;
       color: #9a918a;
@@ -292,6 +298,15 @@
       color: #817a74;
       font-size: 13px;
       line-height: 1.7;
+    }
+
+    /* Ошибка */
+    #errorMessage {
+      display: none;
+      margin-top: 15px;
+      color: #a56f62;
+      font-size: 12px;
+      line-height: 1.6;
     }
 
     @keyframes fadeUp {
@@ -639,14 +654,25 @@
       <!-- Кнопки -->
       <div class="button-wrap">
 
-        <button id="acceptButton" onclick="accept()">
+        <button
+          id="acceptButton"
+          type="button"
+          onclick="accept()">
           Принять приглашение
         </button>
 
-        <button id="noButton" type="button">
+        <button
+          id="noButton"
+          type="button">
           Нет, не пойду
         </button>
 
+      </div>
+
+
+      <!-- Сообщение об ошибке -->
+      <div id="errorMessage">
+        Не удалось отправить ответ. Проверь интернет-соединение и попробуй ещё раз ❤️
       </div>
 
 
@@ -685,41 +711,127 @@
 
   <script>
 
-    /* Кнопка "Принять приглашение" */
-    function accept() {
+    /* ==========================================
+       ПРИНЯТИЕ ПРИГЛАШЕНИЯ
+       ========================================== */
+
+    async function accept() {
 
       const acceptButton = document.getElementById("acceptButton");
       const noButton = document.getElementById("noButton");
       const answer = document.getElementById("answer");
+      const errorMessage = document.getElementById("errorMessage");
 
-      acceptButton.style.display = "none";
-      noButton.style.display = "none";
+      /* Скрываем ошибку */
+      errorMessage.style.display = "none";
 
-      answer.style.display = "block";
+      /* Блокируем кнопку */
+      acceptButton.disabled = true;
+      acceptButton.textContent = "Отправляем...";
 
-      answer.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+
+      try {
+
+        /*
+         * Отправляем запрос на send.php
+         */
+
+        const response = await fetch("send.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            answer: "Согласилась на приглашение ❤️",
+            date: new Date().toLocaleString("ru-RU")
+          })
+        });
+
+
+        /*
+         * Получаем ответ сервера
+         */
+
+        const result = await response.json();
+
+
+        /*
+         * Проверяем результат
+         */
+
+        if (!response.ok || !result.success) {
+          throw new Error("Telegram error");
+        }
+
+
+        /*
+         * Всё успешно
+         */
+
+        acceptButton.style.display = "none";
+        noButton.style.display = "none";
+
+        answer.style.display = "block";
+
+
+        /*
+         * Плавно прокручиваем к ответу
+         */
+
+        answer.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        /*
+         * Показываем ошибку
+         */
+
+        acceptButton.disabled = false;
+        acceptButton.textContent = "Принять приглашение";
+
+        errorMessage.style.display = "block";
+      }
     }
 
 
-    /* Убегающая кнопка */
+    /* ==========================================
+       УБЕГАЮЩАЯ КНОПКА
+       ========================================== */
+
     const noButton = document.getElementById("noButton");
     const buttonWrap = document.querySelector(".button-wrap");
 
-    function moveButton() {
 
-      const wrapRect = buttonWrap.getBoundingClientRect();
+    function moveButton() {
 
       const buttonWidth = noButton.offsetWidth;
       const buttonHeight = noButton.offsetHeight;
 
-      const maxX = Math.max(0, buttonWrap.clientWidth - buttonWidth);
-      const maxY = Math.max(0, buttonWrap.clientHeight - buttonHeight);
+      const maxX = Math.max(
+        0,
+        buttonWrap.clientWidth - buttonWidth
+      );
 
-      const randomX = Math.floor(Math.random() * (maxX + 1));
-      const randomY = Math.floor(Math.random() * (maxY + 1));
+      const maxY = Math.max(
+        0,
+        buttonWrap.clientHeight - buttonHeight
+      );
+
+
+      const randomX = Math.floor(
+        Math.random() * (maxX + 1)
+      );
+
+      const randomY = Math.floor(
+        Math.random() * (maxY + 1)
+      );
+
 
       noButton.style.position = "absolute";
       noButton.style.left = randomX + "px";
@@ -727,22 +839,35 @@
     }
 
 
-    /* Компьютер */
-    noButton.addEventListener("mouseenter", moveButton);
+    /* Компьютер — кнопка убегает при наведении */
+    noButton.addEventListener(
+      "mouseenter",
+      moveButton
+    );
 
 
-    /* Телефон */
-    noButton.addEventListener("touchstart", function(event) {
-      event.preventDefault();
-      moveButton();
-    });
+    /* Телефон — кнопка убегает при касании */
+    noButton.addEventListener(
+      "touchstart",
+      function(event) {
+
+        event.preventDefault();
+
+        moveButton();
+      }
+    );
 
 
-    /* Если каким-то образом всё-таки нажали */
-    noButton.addEventListener("click", function(event) {
-      event.preventDefault();
-      moveButton();
-    });
+    /* Если всё-таки удалось нажать */
+    noButton.addEventListener(
+      "click",
+      function(event) {
+
+        event.preventDefault();
+
+        moveButton();
+      }
+    );
 
   </script>
 
